@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import type { ReactNode } from "react";
-import { useEffect, useRef } from "react";
+import classNames from 'classnames';
+import type { ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 
 type PopupProps = {
     isOpen: boolean;
@@ -27,12 +27,12 @@ const Popup = ({ isOpen, children, className, onClickOutside }: PopupProps) => {
             onClickOutside();
         };
 
-        document.addEventListener("mousedown", handlePointerDown);
-        document.addEventListener("touchstart", handlePointerDown);
+        document.addEventListener('mousedown', handlePointerDown);
+        document.addEventListener('touchstart', handlePointerDown);
 
         return () => {
-            document.removeEventListener("mousedown", handlePointerDown);
-            document.removeEventListener("touchstart", handlePointerDown);
+            document.removeEventListener('mousedown', handlePointerDown);
+            document.removeEventListener('touchstart', handlePointerDown);
         };
     }, [isOpen, onClickOutside]);
 
@@ -44,13 +44,13 @@ const Popup = ({ isOpen, children, className, onClickOutside }: PopupProps) => {
         <div
             ref={popupRef}
             className={classNames(
-                "absolute inline-block w-fit mt-0 bg-white rounded-lg shadow-md overflow-hidden z-20 max-h-60 overflow-y-auto right-0 shadow-xl/30",
+                'absolute inline-block w-fit mt-0 bg-white rounded-lg shadow-md overflow-hidden z-20 max-h-60 overflow-y-auto right-0 shadow-xl/30',
                 className,
             )}
         >
             {children}
         </div>
-    )
-}
+    );
+};
 
 export default Popup;

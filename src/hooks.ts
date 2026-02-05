@@ -44,7 +44,7 @@ export const useInfiniteProducts = (filter?: UbiProductFilter) => {
             return undefined;
         },
     });
-}
+};
 
 export const useProductById = (id: string) => {
     const context = useContext(UbiProductServiceContext);
@@ -58,7 +58,6 @@ export const useProductById = (id: string) => {
         queryFn: () => context.getProductById(id!),
     });
 };
-
 
 export const useProductsBySearchTerm = (searchTerm: string, minSearchTermLength = 3) => {
     const context = useContext(UbiProductServiceContext);
@@ -74,7 +73,7 @@ export const useProductsBySearchTerm = (searchTerm: string, minSearchTermLength 
         queryFn: () => context.getProductsBySearchTerm(trimmedSearchTerm),
         enabled: isEnabled,
     });
-}
+};
 
 export const useProductLines = () => {
     const context = useContext(UbiProductServiceContext);
@@ -86,4 +85,4 @@ export const useProductLines = () => {
         queryKey: [...productKeys.all, 'lines'] as const,
         queryFn: () => context.getProductLines(),
     });
-}
+};

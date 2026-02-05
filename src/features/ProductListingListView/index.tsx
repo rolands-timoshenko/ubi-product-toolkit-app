@@ -1,6 +1,6 @@
-import type { UbiProductListItem } from "@/domain/types";
-import { getProductKey } from "@/utils";
-import { useNavigate } from "react-router-dom";
+import type { UbiProductListItem } from '@/domain/types';
+import { getProductKey } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 type ProductListingListViewProps = { products: UbiProductListItem[] };
 

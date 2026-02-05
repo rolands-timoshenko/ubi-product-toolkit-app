@@ -1,4 +1,9 @@
-import type { UbiProductListItem, UbiProductDetails, UbiProductFilter, UbiProductSearchItem } from './types';
+import type {
+    UbiProductListItem,
+    UbiProductDetails,
+    UbiProductFilter,
+    UbiProductSearchItem,
+} from './types';
 
 export interface IUbiProductService {
     getProducts(filter: UbiProductFilter): Promise<UbiProductListItem[]>;

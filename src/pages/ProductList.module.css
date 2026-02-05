@@ -2,7 +2,7 @@
     border: 1px solid red;
 }
 
-.container ul { 
+.container ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -12,4 +12,4 @@
 .container ul li {
     padding: 8px 12px;
     border-bottom: 1px solid #eee;
- }
+}

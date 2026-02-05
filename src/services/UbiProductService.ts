@@ -1,5 +1,10 @@
 import type { IUbiProductService } from '@/domain/interfaces';
-import type { UbiProductDetails, UbiProductListItem, UbiProductFilter, UbiProductSearchItem } from '@/domain/types';
+import type {
+    UbiProductDetails,
+    UbiProductListItem,
+    UbiProductFilter,
+    UbiProductSearchItem,
+} from '@/domain/types';
 import axios from 'axios';
 import type { UbiProductApiReponse } from '@/api-types';
 
@@ -52,13 +57,13 @@ class UbiProductService implements IUbiProductService {
 
                 return device
                     ? {
-                        id: device.id,
-                        line: device.line?.name,
-                        name: device.product.name,
-                        title: device.product.name,
-                        shortnames: device.shortnames,
-                        image: this.getProductImageUrl(device.id, device.images.nopadding, 400),
-                    }
+                          id: device.id,
+                          line: device.line?.name,
+                          name: device.product.name,
+                          title: device.product.name,
+                          shortnames: device.shortnames,
+                          image: this.getProductImageUrl(device.id, device.images.nopadding, 400),
+                      }
                     : null;
             }
 
@@ -77,7 +82,6 @@ class UbiProductService implements IUbiProductService {
             if (response.status === 200) {
                 return response.data.devices
                     .filter((device) => {
-
                         if (searchTerm) {
                             const searchTermLower = searchTerm.toLowerCase();
                             if (device.product.name.toLowerCase().includes(searchTermLower)) {
