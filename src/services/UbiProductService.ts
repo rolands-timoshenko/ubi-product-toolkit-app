@@ -1,5 +1,5 @@
 import type { IUbiProductService } from '@/domain/interfaces';
-import type { UbiProductDetails, UbiProductListItem, UbiProductFilter } from '@/domain/types';
+import type { UbiProductDetails, UbiProductListItem, UbiProductFilter, UbiProductSearchItem } from '@/domain/types';
 import axios from 'axios';
 import type { UbiProductApiReponse } from '@/api-types';
 
@@ -15,27 +15,12 @@ class UbiProductService implements IUbiProductService {
             if (response.status === 200) {
                 return response.data.devices
                     .filter((device) => {
-                        let matches = true;
-
-                        if (filter.lines) {
-                            matches = matches && device.uisp.line === filter.lines;
+                        if (filter.lines && filter.lines.length > 0) {
+                            return filter.lines.includes(device.line.name);
                         }
-
-                        if (filter.searchTerm) {
-                            const searchTermLower = filter.searchTerm.toLowerCase();
-                            matches =
-                                matches &&
-                                (device.product.name.toLowerCase().includes(searchTermLower) ||
-                                    device.uisp.nameLegacy.some((name) =>
-                                        name.toLowerCase().includes(searchTermLower),
-                                    ) ||
-                                    device.shortnames.some((shortname) =>
-                                        shortname.toLowerCase().includes(searchTermLower),
-                                    ));
-                        }
-
-                        return matches;
+                        return true;
                     })
+                    .slice(filter.offset, filter.offset! + filter.limit!)
                     .map((device) => ({
                         id: device.id,
                         line: device.line.name,
@@ -67,14 +52,67 @@ class UbiProductService implements IUbiProductService {
 
                 return device
                     ? {
-                          id: device.id,
-                          line: device.line?.name,
-                          name: device.product.name,
-                          title: device.product.name,
-                          shortnames: device.shortnames,
-                          image: this.getProductImageUrl(device.id, device.images.nopadding, 400),
-                      }
+                        id: device.id,
+                        line: device.line?.name,
+                        name: device.product.name,
+                        title: device.product.name,
+                        shortnames: device.shortnames,
+                        image: this.getProductImageUrl(device.id, device.images.nopadding, 400),
+                    }
                     : null;
+            }
+
+            throw new Error('Error');
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductsBySearchTerm(searchTerm: string): Promise<UbiProductSearchItem[]> {
+        try {
+            const response = await axios.get<UbiProductApiReponse>(
+                `${this.baseUrl}fingerprint/ui/public.json`,
+            );
+            // Maybe make sense to use bloom filter or something else to optimize search?
+            if (response.status === 200) {
+                return response.data.devices
+                    .filter((device) => {
+
+                        if (searchTerm) {
+                            const searchTermLower = searchTerm.toLowerCase();
+                            if (device.product.name.toLowerCase().includes(searchTermLower)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                    .map((device) => ({
+                        id: device.id,
+                        name: device.product.name,
+                        line: device.line.name,
+                    }));
+            }
+
+            throw new Error('Error');
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductLines(): Promise<string[]> {
+        try {
+            const response = await axios.get<UbiProductApiReponse>(
+                `${this.baseUrl}fingerprint/ui/public.json`,
+            );
+
+            if (response.status === 200) {
+                const linesSet = new Set<string>();
+                response.data.devices.forEach((device) => {
+                    if (device.line?.name) {
+                        linesSet.add(device.line.name);
+                    }
+                });
+                return Array.from(linesSet);
             }
 
             throw new Error('Error');

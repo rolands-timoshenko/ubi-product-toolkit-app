@@ -7,6 +7,12 @@ export type UbiProductListItem = {
     thumbnailUrl?: string;
 };
 
+export type UbiProductSearchItem = {
+    id: string;
+    name: string;
+    line: string;
+};
+
 export type UbiProductDetails = {
     id: string;
     line: string;
@@ -17,6 +23,7 @@ export type UbiProductDetails = {
 };
 
 export type UbiProductFilter = {
-    lines?: string;
-    searchTerm?: string;
+    lines?: string[];
+    offset?: number;
+    limit?: number;
 };
