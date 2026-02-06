@@ -1,27 +1,14 @@
-import ImageError from '@/components/ImageError';
-import ImageLoading from '@/components/ImageLoading';
-import { useState } from 'react';
+import Image from '@/components/Image';
 
-const ProductImage = ({ url }: { url: string }) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [hasError, setHasError] = useState(false);
+type ProductImageProps = {
+    src: string;
+    alt?: string;
+};
 
+const ProductImage = ({ src, alt }: ProductImageProps) => {
     return (
         <div className="w-[100%] sm:h-[292px] sm:w-[292px] p-2 flex items-center justify-center overflow-hidden bg-gray-100 rounded-md relative">
-            {isLoading && !hasError && <ImageLoading />}
-            {hasError && <ImageError />}
-            {!hasError && (
-                <img
-                    src={hasError ? undefined : url}
-                    alt="Product"
-                    className="object-contain w-full h-full"
-                    onLoad={() => setIsLoading(false)}
-                    onError={() => {
-                        setIsLoading(false);
-                        setHasError(true);
-                    }}
-                />
-            )}
+            <Image src={src} alt={alt} />
         </div>
     );
 };

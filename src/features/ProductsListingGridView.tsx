@@ -28,8 +28,8 @@ const ProductsListingGridView = forwardRef<HTMLDivElement, ProductsListingGridVi
                             <p className="absolute top-1 right-1 px-1 bg-white text-xs text-sky-500">
                                 {product.line.trim()}
                             </p>
-                            <div className="flex flex-1 items-center justify-center mb-4 py-2 h-[100px]">
-                                <ImageThumbnail url={product.thumbnailUrl!} />
+                            <div className="flex flex-1 items-center justify-center co py-2 h-[100px]">
+                                <ImageThumbnail src={product.thumbnailUrl!} alt={product.name} />
                             </div>
                             <div className="flex flex-col gap-1 bg-white px-4 py-2">
                                 <p

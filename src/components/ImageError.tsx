@@ -1,7 +1,16 @@
-const ImageError = () => {
+import classNames from 'classnames';
+
+type ImageErrorProps = {
+    className?: string;
+};
+
+const ImageError = ({ className }: ImageErrorProps) => {
     return (
         <svg
-            className="w-12 h-12 text-gray-300 animate-pulse absolute inset-0 m-auto"
+            className={classNames(
+                'w-12 h-12 text-gray-300 animate-pulse absolute inset-0 m-auto',
+                className,
+            )}
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

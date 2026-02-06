@@ -22,7 +22,7 @@ const ProductDetailsPage = () => {
                     &#60;&nbsp;Back
                 </button>
             </div>
-            {product ? <ProductDetails product={product} /> : <p>Product not found.</p>}
+            {product ? <ProductDetails product={product} /> : <></>}
         </div>
     );
 };

@@ -1,11 +1,14 @@
+import Image from './Image';
+
 type ImageIconProps = {
-    url: string;
+    src: string;
+    alt?: string;
 };
 
-const ImageIcon = ({ url }: ImageIconProps) => {
+const ImageIcon = ({ src, alt }: ImageIconProps) => {
     return (
-        <div className="w-[25px] h-[25px] flex items-center justify-center overflow-hidden rounded-md bg-gray-100">
-            <img src={url} alt="Product" className="w-25 object-cover" />
+        <div className="w-[25px] h-[25px] flex items-center justify-center overflow-hidden relative">
+            <Image src={src} alt={alt} />
         </div>
     );
 };

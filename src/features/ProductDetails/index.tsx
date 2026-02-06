@@ -16,7 +16,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
     return (
         <div className="flex flex-col gap-4 w-[800px] xs:w-full min-h-[300px] sm:flex-row sm:items-start sm:gap-10 mx-auto">
             <div className="shrink-0">
-                <ProductImage url={product.image} />
+                <ProductImage src={product.image} alt={product.name} />
             </div>
             <div className="flex-1">
                 <div className="pb-5">

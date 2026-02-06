@@ -6,6 +6,7 @@ import ProductList from '@/pages/ProductList';
 import { queryClient } from './queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import ProductDetailsPage from '@/pages/ProductDetails';
+import ErrorHandler from './features/ErrorHandler';
 
 const ubiProductService = new UbiProductService();
 
@@ -20,6 +21,7 @@ function App() {
                             <Route path="/:id" element={<ProductDetailsPage />} />
                         </Route>
                     </Routes>
+                    <ErrorHandler />
                 </BrowserRouter>
             </QueryClientProvider>
         </DayEventsServiceProvider>

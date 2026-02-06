@@ -38,7 +38,7 @@ const ProductsListingTableView = forwardRef<HTMLDivElement, ProductsListingTable
                             onClick={() => navigate(`/${product.id}`)}
                         >
                             <div className="px-4 py-2 font-medium text-slate-900">
-                                <ImageIcon url={product.iconUrl!} />
+                                <ImageIcon src={product.iconUrl!} alt={product.name} />
                             </div>
                             <div className="px-4 py-2 text-slate-500">{product.line}</div>
                             <div className="px-4 py-2 text-left text-gray-400">{product.name}</div>
