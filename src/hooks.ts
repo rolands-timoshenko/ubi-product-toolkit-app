@@ -1,7 +1,7 @@
 import type { UbiProductFilter } from '@/domain/types';
 import UbiProductServiceContext from '@/providers/UbiProductServiceProvider/context';
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 export const productKeys = {
     all: ['products'] as const,
@@ -43,6 +43,9 @@ export const useInfiniteProducts = (filter?: UbiProductFilter) => {
             }
             return undefined;
         },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60_000,
+        refetchOnWindowFocus: false,
     });
 };
 
@@ -85,4 +88,34 @@ export const useProductLines = () => {
         queryKey: [...productKeys.all, 'lines'] as const,
         queryFn: () => context.getProductLines(),
     });
+};
+
+export const useScrollPositonPreserve = (scrollKey: string | undefined) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!scrollKey || !containerRef.current) {
+            return;
+        }
+        const stored = sessionStorage.getItem(scrollKey);
+        if (stored) {
+            const nextScrollTop = Number(stored);
+            if (!Number.isNaN(nextScrollTop)) {
+                requestAnimationFrame(() => {
+                    if (containerRef.current) {
+                        containerRef.current.scrollTop = nextScrollTop;
+                    }
+                });
+            }
+        }
+    }, [scrollKey]);
+
+    const handleScroll = () => {
+        if (!scrollKey || !containerRef.current) {
+            return;
+        }
+        sessionStorage.setItem(scrollKey, String(containerRef.current.scrollTop));
+    };
+
+    return { containerRef, handleScroll };
 };

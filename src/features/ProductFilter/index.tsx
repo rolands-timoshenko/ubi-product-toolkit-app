@@ -1,3 +1,4 @@
+import Button from '@/components/Button';
 import CheckboxField from '@/components/CheckboxField';
 import Loader from '@/components/Loader';
 import Popup from '@/components/Popup';
@@ -8,10 +9,10 @@ import { useCallback, useMemo, useState } from 'react';
 const ProductFilter = () => {
     const [isFiltersVisible, setFiltersVisible] = useState(false);
     const { filter, setFilters } = useProductListingState();
-    const { data: lines, isLoading, isError } = useProductLines();
+    const { data: lines, isLoading } = useProductLines();
 
     const handleFieldChange = useCallback(
-        (line: string) => (_: boolean) => {
+        (line: string) => () => {
             const lines: string[] = filter?.lines ?? [];
             setFilters({
                 ...filter,
@@ -45,9 +46,9 @@ const ProductFilter = () => {
 
     return (
         <div>
-            <button className="cursor-pointer" onClick={handleShowFilters}>
+            <Button onClick={handleShowFilters} isActive={isFiltersVisible}>
                 Filter
-            </button>
+            </Button>
             <div className="relative">
                 <Popup isOpen={isFiltersVisible} onClickOutside={() => setFiltersVisible(false)}>
                     <div className="p-4">

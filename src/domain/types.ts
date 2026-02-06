@@ -20,6 +20,7 @@ export type UbiProductDetails = {
     title: string;
     shortnames: string[];
     image: string;
+    json: string;
 };
 
 export type UbiProductFilter = {

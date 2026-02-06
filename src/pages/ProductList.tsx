@@ -1,13 +1,12 @@
 import type { UbiProductListItem } from '@/domain/types';
 import ProductFilter from '@/features/ProductFilter';
-import ProductListingListView from '@/features/ProductListingListView';
 import ProductListingSetup from '@/features/ProductListingSetup';
+import ProductsListingTableView from '@/features/ProductsListingTableView';
 import ProductSearch from '@/features/ProductSearch';
-import ProductListingGridView from '@/features/ProductsListingGridView';
 import { useInfiniteProducts } from '@/hooks';
 import { useProductListingState } from '@/state';
-import { Loader } from 'lucide-react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
+import ProductsListingGridView from '@/features/ProductsListingGridView';
 
 const ProductList = () => {
     const filter = useProductListingState((state) => state.filter);
@@ -26,24 +25,31 @@ const ProductList = () => {
     });
 
     return (
-        <>
-            <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4 h-full absolute top-0 left-0 right-0 pt-4 px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <ProductSearch />
                 <div className="flex items-center justify-end gap-2">
                     <ProductListingSetup />
                     <ProductFilter />
                 </div>
             </div>
-            <div className="mt-6">
-                {listType === 'grid' && <ProductListingGridView products={products || []} />}
-                {listType === 'list' && <ProductListingListView products={products || []} />}
-                {hasNextPage && (
-                    <div ref={infiniteRef} className="flex justify-center">
-                        <Loader />
-                    </div>
-                )}
-            </div>
-        </>
+            {listType === 'grid' && (
+                <ProductsListingGridView
+                    ref={infiniteRef}
+                    products={products || []}
+                    hasNextPage={hasNextPage}
+                    scrollKey="product-list-grid"
+                />
+            )}
+            {listType === 'list' && (
+                <ProductsListingTableView
+                    ref={infiniteRef}
+                    products={products || []}
+                    hasNextPage={hasNextPage}
+                    scrollKey="product-list-table"
+                />
+            )}
+        </div>
     );
 };
 

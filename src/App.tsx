@@ -1,12 +1,11 @@
 import Main from '@/layouts/Main';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
 import UbiProductService from '@/services/UbiProductService';
 import DayEventsServiceProvider from '@/providers/UbiProductServiceProvider';
 import ProductList from '@/pages/ProductList';
-import ProductDetails from './pages/ProductDetails';
 import { queryClient } from './queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
+import ProductDetailsPage from '@/pages/ProductDetails';
 
 const ubiProductService = new UbiProductService();
 
@@ -18,7 +17,7 @@ function App() {
                     <Routes>
                         <Route element={<Main />}>
                             <Route path="/" element={<ProductList />} />
-                            <Route path="/:id" element={<ProductDetails />} />
+                            <Route path="/:id" element={<ProductDetailsPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

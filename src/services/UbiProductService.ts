@@ -63,6 +63,7 @@ class UbiProductService implements IUbiProductService {
                           title: device.product.name,
                           shortnames: device.shortnames,
                           image: this.getProductImageUrl(device.id, device.images.nopadding, 400),
+                          json: JSON.stringify(device, null, 2),
                       }
                     : null;
             }

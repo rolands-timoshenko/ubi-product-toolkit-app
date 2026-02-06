@@ -20,7 +20,7 @@ const ProductSearch = ({ className }: ProductSearchProps) => {
     const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
     const navigate = useNavigate();
 
-    const { data, isLoading, isError } = useProductsBySearchTerm(debouncedSearchTerm, 3);
+    const { data } = useProductsBySearchTerm(debouncedSearchTerm, 3);
 
     const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
