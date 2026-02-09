@@ -6,17 +6,29 @@ import type {
     UbiProductSearchItem,
 } from '@/domain/types';
 import axios from 'axios';
-import type { UbiProductApiReponse } from '@/api-types';
-import { ProductsSchema } from '@/domain/schemas';
-import { DataIntegritiError, HttpError, NotFoundError } from '@/domain/errors';
+import { ProductsSchema, type ProductsApiResponse } from '@/domain/schemas';
+import { DataIntegrityError, HttpError, NotFoundError } from '@/domain/errors';
 
 class UbiProductService implements IUbiProductService {
-    // FIXME: use env variable for base url
-    private baseUrl = 'https://static.ui.com/';
+    private baseUrl: string;
+    private imageProxyUrl: string;
+
+    constructor(apiUrl: string, imageProxyUrl: string) {
+        if (!apiUrl) {
+            throw new Error('API URL is required');
+        }
+
+        if (!imageProxyUrl) {
+            throw new Error('Image proxy URL is required');
+        }
+
+        this.baseUrl = apiUrl;
+        this.imageProxyUrl = imageProxyUrl;
+    }
 
     async getProducts(filter: UbiProductFilter): Promise<UbiProductListItem[]> {
         try {
-            const response = await axios.get<UbiProductApiReponse>(
+            const response = await axios.get<ProductsApiResponse>(
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
@@ -27,9 +39,9 @@ class UbiProductService implements IUbiProductService {
                 );
             }
 
-            const parsed = ProductsSchema.safeParse(response.data.devices);
+            const parsed = ProductsSchema.safeParse(response.data);
             if (!parsed.success) {
-                throw new DataIntegritiError("Products data doesn't match expected format");
+                throw new DataIntegrityError("Products data doesn't match expected format");
             }
 
             return response.data.devices
@@ -55,7 +67,7 @@ class UbiProductService implements IUbiProductService {
 
     async getProductById(id: string): Promise<UbiProductDetails | null> {
         try {
-            const response = await axios.get<UbiProductApiReponse>(
+            const response = await axios.get<ProductsApiResponse>(
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
@@ -66,9 +78,9 @@ class UbiProductService implements IUbiProductService {
                 );
             }
 
-            const parsed = ProductsSchema.safeParse(response.data.devices);
+            const parsed = ProductsSchema.safeParse(response.data);
             if (!parsed.success) {
-                throw new DataIntegritiError("Products data doesn't match expected format");
+                throw new DataIntegrityError("Products data doesn't match expected format");
             }
 
             const device = response.data.devices.find((device) => device.id === id);
@@ -93,7 +105,7 @@ class UbiProductService implements IUbiProductService {
 
     async getProductsBySearchTerm(searchTerm: string): Promise<UbiProductSearchItem[]> {
         try {
-            const response = await axios.get<UbiProductApiReponse>(
+            const response = await axios.get<ProductsApiResponse>(
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
@@ -104,9 +116,9 @@ class UbiProductService implements IUbiProductService {
                 );
             }
 
-            const parsed = ProductsSchema.safeParse(response.data.devices);
+            const parsed = ProductsSchema.safeParse(response.data);
             if (!parsed.success) {
-                throw new DataIntegritiError("Products data doesn't match expected format");
+                throw new DataIntegrityError("Products data doesn't match expected format");
             }
 
             // NOTE: Maybe make sense to use bloom filter or something else to optimize search?
@@ -132,7 +144,7 @@ class UbiProductService implements IUbiProductService {
 
     async getProductLines(): Promise<string[]> {
         try {
-            const response = await axios.get<UbiProductApiReponse>(
+            const response = await axios.get<ProductsApiResponse>(
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
@@ -143,9 +155,9 @@ class UbiProductService implements IUbiProductService {
                 );
             }
 
-            const parsed = ProductsSchema.safeParse(response.data.devices);
+            const parsed = ProductsSchema.safeParse(response.data);
             if (!parsed.success) {
-                throw new DataIntegritiError("Products data doesn't match expected format");
+                throw new DataIntegrityError("Products data doesn't match expected format");
             }
 
             const linesSet = new Set<string>();
@@ -164,7 +176,7 @@ class UbiProductService implements IUbiProductService {
         if (axios.isAxiosError(error)) {
             const status = error.response?.status ?? 0;
             throw new HttpError(status, 'Api request failed with status ' + status);
-        } else if (error instanceof DataIntegritiError || error instanceof NotFoundError) {
+        } else if (error instanceof DataIntegrityError || error instanceof NotFoundError) {
             throw error;
         } else {
             throw new Error(
@@ -175,7 +187,7 @@ class UbiProductService implements IUbiProductService {
     }
 
     private getProductImageUrl(productId: string, imageId: string, width: number): string {
-        return `https://images.svc.ui.com/?u=${this.baseUrl}fingerprint/ui/images/${productId}/nopadding/${imageId}.png&w=${width}&q=70`;
+        return `${this.imageProxyUrl}?u=${this.baseUrl}fingerprint/ui/images/${productId}/nopadding/${imageId}.png&w=${width}&q=70`;
     }
 }
 

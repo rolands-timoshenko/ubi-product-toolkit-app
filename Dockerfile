@@ -3,6 +3,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Accept build arguments for environment variables
+ARG VITE_PRODUCT_API_URL
+ARG VITE_IMAGE_PROXY_URL
+
+# Set environment variables from build arguments
+ENV VITE_PRODUCT_API_URL=$VITE_PRODUCT_API_URL
+ENV VITE_IMAGE_PROXY_URL=$VITE_IMAGE_PROXY_URL
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install

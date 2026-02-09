@@ -1,7 +1,7 @@
-class DataIntegritiError extends Error {
+class DataIntegrityError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = 'DataIntegritiError';
+        this.name = 'DataIntegrityError';
     }
 }
 
@@ -9,7 +9,7 @@ class HttpError extends Error {
     status: number;
     constructor(status: number, message: string) {
         super(message);
-        this.name = 'HTTPError';
+        this.name = 'HttpError';
         this.status = status;
     }
 }
@@ -21,4 +21,4 @@ class NotFoundError extends Error {
     }
 }
 
-export { DataIntegritiError, HttpError, NotFoundError };
+export { DataIntegrityError, HttpError, NotFoundError };

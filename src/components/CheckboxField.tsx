@@ -11,8 +11,13 @@ const CheckboxField = ({ label, checked, onChange }: CheckboxFieldProps) => {
 
     return (
         <div className="flex items-center gap-2 cursor-pointer" onClick={handleFieldChange}>
-            <input type="checkbox" checked={checked} className="w-4 h-4" />
-            <label className="select-none whitespace-nowrap">{label}</label>
+            <input
+                type="checkbox"
+                checked={checked}
+                className="w-4 h-4 cursor-pointer"
+                onChange={handleFieldChange}
+            />
+            <label className="select-none whitespace-nowrap cursor-pointer">{label}</label>
         </div>
     );
 };

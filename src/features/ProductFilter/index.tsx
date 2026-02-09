@@ -44,9 +44,13 @@ const ProductFilter = () => {
             .sort((a, b) => Number(b.checked) - Number(a.checked));
     }, [lines, filter?.lines]);
 
+    const isButtonActive = useMemo(() => {
+        return isFiltersVisible || fields.some((f) => f.checked);
+    }, [fields, isFiltersVisible]);
+
     return (
         <div>
-            <Button onClick={handleShowFilters} isActive={isFiltersVisible}>
+            <Button onClick={handleShowFilters} isActive={isButtonActive}>
                 Filter
             </Button>
             <div className="relative">

@@ -28,14 +28,16 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     <dd className="text-sm text-gray-400 text-right">{product.name}</dd>
                     <dt className="text-sm text-gray-500">Line</dt>
                     <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
-                    <dt className="text-sm text-gray-500">Short Name</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
+                    <dt className="text-sm text-gray-500">Short Names</dt>
+                    <dd className="text-sm text-gray-400 text-right">
+                        {product.shortnames.join(', ')}
+                    </dd>
                     <dt className="text-sm text-gray-500">Max. Power</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
+                    <dd className="text-sm text-gray-400 text-right">...</dd>
                     <dt className="text-sm text-gray-500">Speed</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
+                    <dd className="text-sm text-gray-400 text-right">...</dd>
                     <dt className="text-sm text-gray-500">Number or ports</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
+                    <dd className="text-sm text-gray-400 text-right">...</dd>
                 </dl>
                 <div className="mt-6">
                     <button

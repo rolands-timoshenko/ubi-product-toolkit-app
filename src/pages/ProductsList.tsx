@@ -8,7 +8,7 @@ import { useProductListingState } from '@/state';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import ProductsListingGridView from '@/features/ProductsListingGridView';
 
-const ProductList = () => {
+const ProductsList = () => {
     const filter = useProductListingState((state) => state.filter);
     const listType = useProductListingState((state) => state.listType);
     const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -53,4 +53,4 @@ const ProductList = () => {
     );
 };
 
-export default ProductList;
+export default ProductsList;

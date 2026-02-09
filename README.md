@@ -29,38 +29,41 @@ A React + TypeScript application for browsing the Ubiquiti product catalog. It s
 ## Getting Started
 
 1. Install dependencies:
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 2. Start the dev server:
-   ```bash
-   npm run dev
-   ```
+    ```bash
+    npm run dev
+    ```
 
 ## Docker
 
 Build the image:
+
 ```bash
 docker build -t ubi-product-toolkit-app .
 ```
 
 Run the container:
+
 ```bash
 docker run --rm -p 8080:80 ubi-product-toolkit-app
 ```
 
 ## Deploy (Fly.io)
 
-This repo includes a deployment script at [scripts/deploy.sh](scripts/deploy.sh). It reads a local .env file, sets non-VITE_ keys as Fly secrets, and forwards VITE_ keys as Docker build arguments.
+This repo includes a deployment script at [scripts/deploy.sh](scripts/deploy.sh). It reads a local .env file, sets non-VITE* keys as Fly secrets, and forwards VITE* keys as Docker build arguments.
+**Important:** For deployment from local env
 
 1. Install and authenticate with flyctl.
     ```
     flyctl auth login
     ```
 2. Deploy:
-   ```bash
-   ./scripts/deploy.sh
-   ```
+    ```bash
+    ./scripts/deploy.sh
+    ```
 
 ## Scripts
 

@@ -1,16 +1,11 @@
+import Loader from '@/components/Loader';
 import ProductDetails from '@/features/ProductDetails';
 import { useProductById } from '@/hooks';
 import { useParams } from 'react-router-dom';
 
 const ProductDetailsPage = () => {
-    const { id } = useParams<{ id: string }>();
-
-    const { data: product, isLoading } = useProductById(id!);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
+    const { productId } = useParams() as { productId: string };
+    const { data: product } = useProductById(productId);
     return (
         <div className="flex flex-col justify-center py-4 px-4 w-full">
             <div className="">
@@ -22,7 +17,7 @@ const ProductDetailsPage = () => {
                     &#60;&nbsp;Back
                 </button>
             </div>
-            {product ? <ProductDetails product={product} /> : <></>}
+            {product ? <ProductDetails product={product} /> : <Loader />}
         </div>
     );
 };
