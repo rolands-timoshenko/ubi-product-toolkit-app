@@ -5,7 +5,7 @@ import DayEventsServiceProvider from '@/providers/UbiProductServiceProvider';
 import ProductsList from '@/pages/ProductsList';
 import { queryClient } from './queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
-import ProductDetailsPage from '@/pages/ProductDetails';
+import ProductDetails from '@/pages/ProductDetails';
 import ErrorHandler from './components/ErrorHandler';
 import config from './config';
 const ubiProductService = new UbiProductService(config.productApiUrl, config.imageProxyUrl);
@@ -18,7 +18,7 @@ function App() {
                     <Routes>
                         <Route element={<Main />}>
                             <Route path="/" element={<ProductsList />} />
-                            <Route path="/:productId" element={<ProductDetailsPage />} />
+                            <Route path="/:productId" element={<ProductDetails />} />
                         </Route>
                     </Routes>
                     <ErrorHandler />

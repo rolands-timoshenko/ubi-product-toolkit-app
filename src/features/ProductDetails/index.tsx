@@ -1,20 +1,24 @@
 import type { UbiProductDetails } from '@/domain/types';
+import { useProductById } from './hooks';
 import { useCallback, useState } from 'react';
-import ProductImage from './components/ProductImage';
 import ProductDetailsAsJsonDialog from './components/ProductDetailsAsJsonDialog';
+import ProductDetailsTable from './components/ProductDetailsTable';
+import ProductImage from './components/ProductImage';
 
 type ProductDetailsProps = {
-    product: UbiProductDetails;
-    isLoading?: boolean;
+    productId: string;
 };
 
-const ProductDetails = ({ product }: ProductDetailsProps) => {
+const ProductDetails = ({ productId }: ProductDetailsProps) => {
+    const { data: product } = useProductById(productId) as { data: UbiProductDetails };
     const [isJsonOpen, setJsonOpen] = useState(false);
+
     const handleDialogClose = useCallback(() => {
         setJsonOpen(false);
     }, []);
+
     return (
-        <div className="flex flex-col gap-4 w-[800px] xs:w-full min-h-[300px] sm:flex-row sm:items-start sm:gap-10 mx-auto">
+        <div className="flex flex-col gap-4 w-[800px] xs:w-full min-h-[300px] sm:flex-row sm:items-start sm:gap-10 mx-auto relative">
             <div className="shrink-0">
                 <ProductImage src={product.image} alt={product.name} />
             </div>
@@ -23,22 +27,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     <h2 className="font-bold text-lg">{product.name}</h2>
                     <p className="text-gray-400 text-sm">{product.line}</p>
                 </div>
-                <dl className="grid grid-cols-[160px_1fr] gap-x-6 gap-y-4">
-                    <dt className="text-sm text-gray-500">Name</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.name}</dd>
-                    <dt className="text-sm text-gray-500">Line</dt>
-                    <dd className="text-sm text-gray-400 text-right">{product.line}</dd>
-                    <dt className="text-sm text-gray-500">Short Names</dt>
-                    <dd className="text-sm text-gray-400 text-right">
-                        {product.shortnames.join(', ')}
-                    </dd>
-                    <dt className="text-sm text-gray-500">Max. Power</dt>
-                    <dd className="text-sm text-gray-400 text-right">...</dd>
-                    <dt className="text-sm text-gray-500">Speed</dt>
-                    <dd className="text-sm text-gray-400 text-right">...</dd>
-                    <dt className="text-sm text-gray-500">Number or ports</dt>
-                    <dd className="text-sm text-gray-400 text-right">...</dd>
-                </dl>
+                <ProductDetailsTable product={product} />
                 <div className="mt-6">
                     <button
                         type="button"

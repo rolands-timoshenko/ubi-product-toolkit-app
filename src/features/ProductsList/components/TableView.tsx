@@ -1,18 +1,18 @@
 import ImageIcon from '@/components/ImageIcon';
 import Loader from '@/components/Loader';
 import type { UbiProductListItem } from '@/domain/types';
-import { useScrollPositonPreserve } from '@/hooks';
 import { getProductKey } from '@/utils';
 import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useScrollPositonPreserve } from '../hooks';
 
-type ProductsListingTableViewProps = {
+type TableViewProps = {
     products: UbiProductListItem[];
     hasNextPage?: boolean;
     scrollKey?: string;
 };
 
-const ProductsListingTableView = forwardRef<HTMLDivElement, ProductsListingTableViewProps>(
+const TableView = forwardRef<HTMLDivElement, TableViewProps>(
     ({ products, hasNextPage, scrollKey }, ref) => {
         const navigate = useNavigate();
         const { handleScroll, containerRef } = useScrollPositonPreserve(scrollKey);
@@ -55,4 +55,4 @@ const ProductsListingTableView = forwardRef<HTMLDivElement, ProductsListingTable
     },
 );
 
-export default ProductsListingTableView;
+export default TableView;

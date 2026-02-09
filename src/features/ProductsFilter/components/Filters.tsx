@@ -2,11 +2,11 @@ import Button from '@/components/Button';
 import CheckboxField from '@/components/CheckboxField';
 import Loader from '@/components/Loader';
 import Popup from '@/components/Popup';
-import { useProductLines } from '@/hooks';
+import { useProductLines } from '../hooks';
 import { useProductListingState } from '@/state';
 import { useCallback, useMemo, useState } from 'react';
 
-const ProductFilter = () => {
+const Filters = () => {
     const [isFiltersVisible, setFiltersVisible] = useState(false);
     const { filter, setFilters } = useProductListingState();
     const { data: lines, isLoading } = useProductLines();
@@ -78,4 +78,4 @@ const ProductFilter = () => {
     );
 };
 
-export default ProductFilter;
+export default Filters;

@@ -1,18 +1,18 @@
 import ImageThumbnail from '@/components/ImageThumbnail';
 import Loader from '@/components/Loader';
 import type { UbiProductListItem } from '@/domain/types';
-import { useScrollPositonPreserve } from '@/hooks';
 import { getProductKey } from '@/utils';
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useScrollPositonPreserve } from '../hooks';
 
-type ProductsListingGridViewProps = {
+type GridViewProps = {
     products: UbiProductListItem[];
     hasNextPage?: boolean;
     scrollKey?: string;
 };
 
-const ProductsListingGridView = forwardRef<HTMLDivElement, ProductsListingGridViewProps>(
+const GridView = forwardRef<HTMLDivElement, GridViewProps>(
     ({ products, hasNextPage, scrollKey }, ref) => {
         const { handleScroll, containerRef } = useScrollPositonPreserve(scrollKey);
 
@@ -53,4 +53,4 @@ const ProductsListingGridView = forwardRef<HTMLDivElement, ProductsListingGridVi
     },
 );
 
-export default ProductsListingGridView;
+export default GridView;

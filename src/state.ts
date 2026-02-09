@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { UbiProductFilter } from './domain/types';
+import { ProductListingType } from './types';
 
 type ProductListingState = {
     filter: UbiProductFilter;
-    listType: 'grid' | 'list';
+    listType: ProductListingType;
     setFilters: (filter: UbiProductFilter) => void;
-    setListType: (listType: 'grid' | 'list') => void;
+    setListType: (listType: ProductListingType) => void;
 };
 
 type AppState = {
@@ -18,7 +19,7 @@ const useProductListingState = create<ProductListingState>()(
     persist(
         (set) => ({
             filter: {},
-            listType: 'list',
+            listType: ProductListingType.LIST,
             setFilters: (filter) => set({ filter }),
             setListType: (listType) => set({ listType }),
         }),
