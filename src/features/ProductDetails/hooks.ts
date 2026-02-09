@@ -1,7 +1,7 @@
 import UbiProductServiceContext from '@/providers/UbiProductServiceProvider/context';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
-import { produqueriesCachingKeysctKeys } from './config';
+import { queriesCachingKeys } from './config';
 
 export const useProductById = (id: string) => {
     const context = useContext(UbiProductServiceContext);
@@ -10,9 +10,7 @@ export const useProductById = (id: string) => {
     }
 
     return useSuspenseQuery({
-        queryKey: id
-            ? produqueriesCachingKeysctKeys.detail(id)
-            : produqueriesCachingKeysctKeys.detail(''),
+        queryKey: id ? queriesCachingKeys.detail(id) : queriesCachingKeys.detail(''),
         queryFn: () => context.getProductById(id!),
     });
 };

@@ -1,3 +1,5 @@
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import PageError from '@/components/PageError';
 import PageLoader from '@/components/PageLoader';
 import { default as ProductDetailsFeature } from '@/features/ProductDetails';
 import { Suspense } from 'react';
@@ -16,9 +18,11 @@ const ProductDetails = () => {
                     &#60;&nbsp;Back
                 </button>
             </div>
-            <Suspense fallback={<PageLoader />}>
-                <ProductDetailsFeature productId={productId} />
-            </Suspense>
+            <ErrorBoundary fallback={<PageError />}>
+                <Suspense fallback={<PageLoader />}>
+                    <ProductDetailsFeature productId={productId} />
+                </Suspense>
+            </ErrorBoundary>
         </div>
     );
 };

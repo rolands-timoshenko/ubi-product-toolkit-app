@@ -7,7 +7,7 @@ import type {
 
 export interface IUbiProductService {
     getProducts(filter: UbiProductFilter): Promise<UbiProductListItem[]>;
-    getProductById(id: string): Promise<UbiProductDetails | null>;
+    getProductById(id: string): Promise<UbiProductDetails>;
     getProductsBySearchTerm(searchTerm: string): Promise<UbiProductSearchItem[]>;
     getProductLines(): Promise<string[]>;
 }

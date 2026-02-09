@@ -65,7 +65,7 @@ class UbiProductService implements IUbiProductService {
         }
     }
 
-    async getProductById(id: string): Promise<UbiProductDetails | null> {
+    async getProductById(id: string): Promise<UbiProductDetails> {
         try {
             const response = await axios.get<ProductsApiResponse>(
                 `${this.baseUrl}fingerprint/ui/public.json`,
