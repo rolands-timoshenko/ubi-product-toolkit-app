@@ -5,9 +5,10 @@ import type {
     UbiProductFilter,
     UbiProductSearchItem,
 } from '@/domain/types';
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import { ProductsSchema, type ProductsApiResponse } from '@/domain/schemas';
 import { DataIntegrityError, HttpError, NotFoundError } from '@/domain/errors';
+import type { ZodObject } from 'zod';
 
 class UbiProductService implements IUbiProductService {
     private baseUrl: string;
@@ -32,17 +33,7 @@ class UbiProductService implements IUbiProductService {
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
-            if (response.status !== 200) {
-                throw new HttpError(
-                    response.status,
-                    'Api request failed with status ' + response.status,
-                );
-            }
-
-            const parsed = ProductsSchema.safeParse(response.data);
-            if (!parsed.success) {
-                throw new DataIntegrityError("Products data doesn't match expected format");
-            }
+            UbiProductService.validateResponse(response, ProductsSchema);
 
             return response.data.devices
                 .filter((device) => {
@@ -71,17 +62,7 @@ class UbiProductService implements IUbiProductService {
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
-            if (response.status !== 200) {
-                throw new HttpError(
-                    response.status,
-                    'Api request failed with status ' + response.status,
-                );
-            }
-
-            const parsed = ProductsSchema.safeParse(response.data);
-            if (!parsed.success) {
-                throw new DataIntegrityError("Products data doesn't match expected format");
-            }
+            UbiProductService.validateResponse(response, ProductsSchema);
 
             const device = response.data.devices.find((device) => device.id === id);
 
@@ -109,17 +90,7 @@ class UbiProductService implements IUbiProductService {
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
-            if (response.status !== 200) {
-                throw new HttpError(
-                    response.status,
-                    'Api request failed with status ' + response.status,
-                );
-            }
-
-            const parsed = ProductsSchema.safeParse(response.data);
-            if (!parsed.success) {
-                throw new DataIntegrityError("Products data doesn't match expected format");
-            }
+            UbiProductService.validateResponse(response, ProductsSchema);
 
             // NOTE: Maybe make sense to use bloom filter or something else to optimize search?
             return response.data.devices
@@ -148,17 +119,7 @@ class UbiProductService implements IUbiProductService {
                 `${this.baseUrl}fingerprint/ui/public.json`,
             );
 
-            if (response.status !== 200) {
-                throw new HttpError(
-                    response.status,
-                    'Api request failed with status ' + response.status,
-                );
-            }
-
-            const parsed = ProductsSchema.safeParse(response.data);
-            if (!parsed.success) {
-                throw new DataIntegrityError("Products data doesn't match expected format");
-            }
+            UbiProductService.validateResponse(response, ProductsSchema);
 
             const linesSet = new Set<string>();
             response.data.devices.forEach((device) => {
@@ -169,6 +130,65 @@ class UbiProductService implements IUbiProductService {
             return Array.from(linesSet);
         } catch (error) {
             UbiProductService.processError(error);
+        }
+    }
+
+    async getNextProductId(currentProductId: string): Promise<string> {
+        try {
+            const response = await axios.get<ProductsApiResponse>(
+                `${this.baseUrl}fingerprint/ui/public.json`,
+            );
+
+            UbiProductService.validateResponse(response, ProductsSchema);
+
+            const currentIndex = response.data.devices.findIndex((device) => device.id === currentProductId);
+
+            if (currentIndex === -1) {
+                throw new NotFoundError(`Product with id ${currentProductId} not found`);
+            }
+
+            const nextIndex = (currentIndex + 1) % response.data.devices.length;
+            return response.data.devices[nextIndex].id;
+
+        } catch (error) {
+            UbiProductService.processError(error);
+        }
+    }
+
+    async getPreviousProductId(currentProductId: string): Promise<string> {
+        
+        try {
+            const response = await axios.get<ProductsApiResponse>(
+                `${this.baseUrl}fingerprint/ui/public.json`,
+            );
+
+            UbiProductService.validateResponse(response, ProductsSchema);
+
+            const currentIndex = response.data.devices.findIndex((device) => device.id === currentProductId);
+
+            if (currentIndex === -1) {
+                throw new NotFoundError(`Product with id ${currentProductId} not found`);
+            }
+
+            const previousIndex = (currentIndex - 1 + response.data.devices.length) % response.data.devices.length;
+            return response.data.devices[previousIndex].id;
+
+        } catch (error) {
+            UbiProductService.processError(error);
+        }
+    }
+
+    private static validateResponse(response: AxiosResponse, schema: ZodObject): void {
+        if (response.status !== 200) {
+            throw new HttpError(
+                response.status,
+                'Api request failed with status ' + response.status,
+            );
+        }
+
+        const parsed = schema.safeParse(response.data);
+        if (!parsed.success) {
+            throw new DataIntegrityError("Products data doesn't match expected format");
         }
     }
 
