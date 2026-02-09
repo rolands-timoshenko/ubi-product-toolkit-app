@@ -18,11 +18,11 @@ const ProductDetails = ({ productId }: ProductDetailsProps) => {
     }, []);
 
     return (
-        <div className="flex flex-col gap-4 w-[800px] xs:w-full min-h-[300px] sm:flex-row sm:items-start sm:gap-10 mx-auto relative">
-            <div className="shrink-0">
+        <div className="flex flex-col gap-4 w-full max-w-[800px] min-h-[300px] sm:flex-row sm:items-start sm:gap-10 mx-auto relative">
+            <div className="shrink-0 min-w-0">
                 <ProductImage src={product.image} alt={product.name} />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
                 <div className="pb-5">
                     <h2 className="font-bold text-lg">{product.name}</h2>
                     <p className="text-gray-400 text-sm">{product.line}</p>
