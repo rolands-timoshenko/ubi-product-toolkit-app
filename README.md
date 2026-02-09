@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# UBI Product Toolkit App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript application for browsing the Ubiquiti product catalog. It supports grid and list layouts, filtering by product line, and quick search with debounced suggestions. Product details include images and a raw JSON view of the underlying data.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Product catalog with list and grid views
+- Infinite scrolling on listings
+- Search with debounced suggestions
+- Filter by product line
+- Product details with image preview and raw JSON
+- Centralized error handling for API failures
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + TypeScript + Vite
+- Tailwind CSS
+- React Router
+- TanStack Query (data fetching & caching)
+- Zustand (UI state)
+- Zod (schema validation)
+- Axios (HTTP)
 
-## Expanding the ESLint configuration
+## Data Source
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Products: https://static.ui.com/fingerprint/ui/public.json
+- Images: https://images.svc.ui.com/
 
-```js
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
+## Getting Started
 
-            // Remove tseslint.configs.recommended and replace with this
-            tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            tseslint.configs.stylisticTypeChecked,
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the dev server:
+   ```bash
+   npm run dev
+   ```
 
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-]);
+## Docker
+
+Build the image:
+```bash
+docker build -t ubi-product-toolkit-app .
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended,
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-]);
+Run the container:
+```bash
+docker run --rm -p 8080:80 ubi-product-toolkit-app
 ```
+
+## Deploy (Fly.io)
+
+This repo includes a deployment script at [scripts/deploy.sh](scripts/deploy.sh). It reads a local .env file, sets non-VITE_ keys as Fly secrets, and forwards VITE_ keys as Docker build arguments.
+
+1. Install and authenticate with flyctl.
+    ```
+    flyctl auth login
+    ```
+2. Deploy:
+   ```bash
+   ./scripts/deploy.sh
+   ```
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run format
+npm run format:check
+```
+
+## Project Structure
+
+- src/components — shared UI building blocks
+- src/features — product listing, search, filters, details
+- src/pages — route-level screens
+- src/services — API access layer
+- src/providers — service and app providers
+- src/layouts - UI reusable layouts
