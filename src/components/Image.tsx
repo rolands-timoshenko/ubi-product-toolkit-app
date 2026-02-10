@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ImageLoading from './ImageLoading';
 import ImageError from './ImageError';
 
@@ -8,23 +8,12 @@ type ImageProps = {
 };
 
 const Image = ({ src, alt = '' }: ImageProps) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [hasError, setHasError] = useState(false);
+    const [status, setStatus] = useState({ src, isLoading: true, hasError: false });
     const imgRef = useRef<HTMLImageElement | null>(null);
 
-    useEffect(() => {
-        setIsLoading(true);
-        setHasError(false);
-    }, [src]);
-
-    useEffect(() => {
-        const img = imgRef.current;
-        if (img && img.complete) {
-            setIsLoading(false);
-        }
-    }, [src]);
-
-    console.info('Rendering Image component with src:', src);
+    const isStale = status.src !== src;
+    const isLoading = isStale ? true : status.isLoading;
+    const hasError = isStale ? false : status.hasError;
 
     return (
         <>
@@ -38,10 +27,13 @@ const Image = ({ src, alt = '' }: ImageProps) => {
                     alt={alt}
                     className="object-contain w-full h-full"
                     style={{ visibility: isLoading ? 'hidden' : 'visible' }}
-                    onLoad={() => setIsLoading(false)}
+                    onLoad={() => {
+                        if (imgRef.current?.complete) {
+                            setStatus({ src, isLoading: false, hasError: false });
+                        }
+                    }}
                     onError={() => {
-                        setIsLoading(false);
-                        setHasError(true);
+                        setStatus({ src, isLoading: false, hasError: true });
                     }}
                 />
             )}

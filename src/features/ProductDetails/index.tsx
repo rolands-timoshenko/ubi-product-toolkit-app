@@ -23,13 +23,13 @@ const ProductDetails = ({ productId, onSelectProduct }: ProductDetailsProps) => 
         if (product?.nextProductId) {
             onSelectProduct?.(product.nextProductId);
         }
-    }
+    };
 
     const handlePreviousProduct = () => {
         if (product?.previousProductId) {
             onSelectProduct?.(product.previousProductId);
         }
-    }
+    };
 
     return (
         <div className="flex flex-col">

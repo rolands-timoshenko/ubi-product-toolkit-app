@@ -63,7 +63,7 @@ class UbiProductService implements IUbiProductService {
             );
 
             UbiProductService.validateResponse(response, ProductsSchema);
-            
+
             const deviceIndex = response.data.devices.findIndex((device) => device.id === id);
 
             if (deviceIndex === -1) {
@@ -80,10 +80,12 @@ class UbiProductService implements IUbiProductService {
                 shortnames: device.shortnames,
                 image: this.getProductImageUrl(device.id, device.images.nopadding, 300),
                 json: JSON.stringify(device, null, 2),
-                nextProductId: response.data.devices[(deviceIndex + 1) % response.data.devices.length].id,
+                nextProductId:
+                    response.data.devices[(deviceIndex + 1) % response.data.devices.length].id,
                 previousProductId:
                     response.data.devices[
-                        (deviceIndex - 1 + response.data.devices.length) % response.data.devices.length
+                        (deviceIndex - 1 + response.data.devices.length) %
+                            response.data.devices.length
                     ].id,
             };
         } catch (error) {

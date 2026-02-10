@@ -10,9 +10,12 @@ const ProductDetails = () => {
     const { productId } = useParams() as { productId: string };
     const navigate = useNavigate();
 
-    const handleNavigateToProduct = useCallback((productId: string) => {
-        navigate(`/${productId}`);
-    }, [navigate]);
+    const handleNavigateToProduct = useCallback(
+        (productId: string) => {
+            navigate(`/${productId}`);
+        },
+        [navigate],
+    );
 
     return (
         <div className="flex flex-col py-4 px-4 w-full min-h-[500px] relative">
@@ -23,7 +26,10 @@ const ProductDetails = () => {
             </div>
             <ErrorBoundary fallback={<PageError />}>
                 <Suspense fallback={<PageLoader />}>
-                    <ProductDetailsFeature productId={productId} onSelectProduct={handleNavigateToProduct} />
+                    <ProductDetailsFeature
+                        productId={productId}
+                        onSelectProduct={handleNavigateToProduct}
+                    />
                 </Suspense>
             </ErrorBoundary>
         </div>
