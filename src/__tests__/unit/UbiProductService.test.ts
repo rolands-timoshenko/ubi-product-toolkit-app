@@ -145,6 +145,8 @@ describe('UbiProductService', () => {
                 shortnames: ['U6P'],
                 image: expect.stringContaining('w=300'),
                 json: expect.stringContaining('"id": "product-1"'),
+                nextProductId: 'product-2',
+                previousProductId: 'product-3',
             });
         });
 

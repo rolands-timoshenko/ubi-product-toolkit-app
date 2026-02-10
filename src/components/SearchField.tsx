@@ -5,9 +5,10 @@ type SearchFieldProps = {
     placeholder?: string;
     value?: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-const SearchField = ({ value, placeholder, onChange }: SearchFieldProps) => {
+const SearchField = ({ value, placeholder, onChange, onKeyDown }: SearchFieldProps) => {
     const handleClearValue = useCallback(() => {
         onChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
     }, [onChange]);
@@ -30,6 +31,7 @@ const SearchField = ({ value, placeholder, onChange }: SearchFieldProps) => {
                     hover:bg-gray-200
                     focus:border-sky-500 bg-gray-100 focus:ring-0
                     focus:outline-none"
+                onKeyDown={onKeyDown}
             />
         </div>
     );

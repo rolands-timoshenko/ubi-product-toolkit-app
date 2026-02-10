@@ -134,10 +134,9 @@ class UbiProductService implements IUbiProductService {
         normalizedSearchTerm: string,
     ): boolean {
         const name = device.product?.name ?? '';
-        const line = device.line?.name ?? '';
         const shortnames = device.shortnames ?? [];
 
-        const haystacks = [name, line, device.id, ...shortnames]
+        const haystacks = [name, device.id, ...shortnames]
             .filter((value): value is string => Boolean(value))
             .map((value) => this.normalizeSearchTerm(value));
 
