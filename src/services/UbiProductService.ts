@@ -103,6 +103,7 @@ class UbiProductService implements IUbiProductService {
 
             // NOTE: Maybe make sense to use bloom filter or something else to optimize search?
             const normalizedSearchTerm = this.normalizeSearchTerm(searchTerm);
+
             if (!normalizedSearchTerm) {
                 return [];
             }
@@ -136,7 +137,7 @@ class UbiProductService implements IUbiProductService {
         const name = device.product?.name ?? '';
         const shortnames = device.shortnames ?? [];
 
-        const haystacks = [name, device.id, ...shortnames]
+        const haystacks = [name, ...shortnames]
             .filter((value): value is string => Boolean(value))
             .map((value) => this.normalizeSearchTerm(value));
 
