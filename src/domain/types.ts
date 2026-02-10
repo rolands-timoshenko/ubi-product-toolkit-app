@@ -21,6 +21,8 @@ export type UbiProductDetails = {
     shortnames: string[];
     image: string;
     json: string;
+    nextProductId?: string;
+    previousProductId?: string;
 };
 
 export type UbiProductFilter = {

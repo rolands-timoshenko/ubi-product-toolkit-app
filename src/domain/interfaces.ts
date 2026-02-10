@@ -10,6 +10,4 @@ export interface IUbiProductService {
     getProductById(id: string): Promise<UbiProductDetails>;
     getProductsBySearchTerm(searchTerm: string): Promise<UbiProductSearchItem[]>;
     getProductLines(): Promise<string[]>;
-    getNextProductId(currentProductId: string): Promise<string>;
-    getPreviousProductId(currentProductId: string): Promise<string>;
 }

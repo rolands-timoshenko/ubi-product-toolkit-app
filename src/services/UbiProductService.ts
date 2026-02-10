@@ -63,12 +63,14 @@ class UbiProductService implements IUbiProductService {
             );
 
             UbiProductService.validateResponse(response, ProductsSchema);
+            
+            const deviceIndex = response.data.devices.findIndex((device) => device.id === id);
 
-            const device = response.data.devices.find((device) => device.id === id);
-
-            if (!device) {
+            if (deviceIndex === -1) {
                 throw new NotFoundError(`Product with id ${id} not found`);
             }
+
+            const device = response.data.devices[deviceIndex];
 
             return {
                 id: device.id,
@@ -78,6 +80,11 @@ class UbiProductService implements IUbiProductService {
                 shortnames: device.shortnames,
                 image: this.getProductImageUrl(device.id, device.images.nopadding, 300),
                 json: JSON.stringify(device, null, 2),
+                nextProductId: response.data.devices[(deviceIndex + 1) % response.data.devices.length].id,
+                previousProductId:
+                    response.data.devices[
+                        (deviceIndex - 1 + response.data.devices.length) % response.data.devices.length
+                    ].id,
             };
         } catch (error) {
             UbiProductService.processError(error);
@@ -93,15 +100,14 @@ class UbiProductService implements IUbiProductService {
             UbiProductService.validateResponse(response, ProductsSchema);
 
             // NOTE: Maybe make sense to use bloom filter or something else to optimize search?
+            const normalizedSearchTerm = this.normalizeSearchTerm(searchTerm);
+            if (!normalizedSearchTerm) {
+                return [];
+            }
+
             return response.data.devices
                 .filter((device) => {
-                    if (searchTerm) {
-                        const searchTermLower = searchTerm.toLowerCase();
-                        if (device.product.name.toLowerCase().includes(searchTermLower)) {
-                            return true;
-                        }
-                    }
-                    return false;
+                    return this.matchesSearchTerm(device, normalizedSearchTerm);
                 })
                 .map((device) => ({
                     id: device.id,
@@ -111,6 +117,29 @@ class UbiProductService implements IUbiProductService {
         } catch (error) {
             UbiProductService.processError(error);
         }
+    }
+
+    private normalizeSearchTerm(term: string): string {
+        return term
+            .normalize('NFKD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase();
+    }
+
+    private matchesSearchTerm(
+        device: ProductsApiResponse['devices'][number],
+        normalizedSearchTerm: string,
+    ): boolean {
+        const name = device.product?.name ?? '';
+        const line = device.line?.name ?? '';
+        const shortnames = device.shortnames ?? [];
+
+        const haystacks = [name, line, device.id, ...shortnames]
+            .filter((value): value is string => Boolean(value))
+            .map((value) => this.normalizeSearchTerm(value));
+
+        return haystacks.some((value) => value.includes(normalizedSearchTerm));
     }
 
     async getProductLines(): Promise<string[]> {
@@ -128,51 +157,6 @@ class UbiProductService implements IUbiProductService {
                 }
             });
             return Array.from(linesSet);
-        } catch (error) {
-            UbiProductService.processError(error);
-        }
-    }
-
-    async getNextProductId(currentProductId: string): Promise<string> {
-        try {
-            const response = await axios.get<ProductsApiResponse>(
-                `${this.baseUrl}fingerprint/ui/public.json`,
-            );
-
-            UbiProductService.validateResponse(response, ProductsSchema);
-
-            const currentIndex = response.data.devices.findIndex((device) => device.id === currentProductId);
-
-            if (currentIndex === -1) {
-                throw new NotFoundError(`Product with id ${currentProductId} not found`);
-            }
-
-            const nextIndex = (currentIndex + 1) % response.data.devices.length;
-            return response.data.devices[nextIndex].id;
-
-        } catch (error) {
-            UbiProductService.processError(error);
-        }
-    }
-
-    async getPreviousProductId(currentProductId: string): Promise<string> {
-        
-        try {
-            const response = await axios.get<ProductsApiResponse>(
-                `${this.baseUrl}fingerprint/ui/public.json`,
-            );
-
-            UbiProductService.validateResponse(response, ProductsSchema);
-
-            const currentIndex = response.data.devices.findIndex((device) => device.id === currentProductId);
-
-            if (currentIndex === -1) {
-                throw new NotFoundError(`Product with id ${currentProductId} not found`);
-            }
-
-            const previousIndex = (currentIndex - 1 + response.data.devices.length) % response.data.devices.length;
-            return response.data.devices[previousIndex].id;
-
         } catch (error) {
             UbiProductService.processError(error);
         }
